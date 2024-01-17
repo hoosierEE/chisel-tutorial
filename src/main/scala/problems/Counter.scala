@@ -17,7 +17,9 @@ object Counter {
   // Modify below ----------
   def counter(max: UInt, en: Bool, amt: UInt): UInt = {
     val x = RegInit(0.U(max.getWidth.W))
-    x := wrapAround(x + 1.U, max)
+    when (en) { x := wrapAround(x+amt,max) }
+    // alternative to above approach using Mux instead of when():
+    // x := wrapAround(Mux(en, x + amt, x), max)
     x
   }
   // Modify above ----------
@@ -32,5 +34,4 @@ class Counter extends Module {
   })
 
   io.tot := Counter.counter(255.U, io.inc, io.amt)
-
 }
